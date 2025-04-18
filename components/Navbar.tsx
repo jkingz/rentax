@@ -37,7 +37,7 @@ const Navbar = () => {
           Discover your perfect rental apartment with our advanced search
         </p>
         <div className="flex items-center gap-5">
-          <Link href="/login">
+          <Link href="/signin">
             <Button
               variant="outline"
               className="text-white border-white bg-transparent hover:bg-white hover:text-black rounded-lg"
@@ -45,9 +45,9 @@ const Navbar = () => {
               Sign in
             </Button>
           </Link>
-          <Link href="/register">
+          <Link href="/signup">
             <Button
-              variant="outline"
+              variant="secondary"
               className="text-white bg-purple-600 hover:bg-white hover:text-black rounded-lg"
             >
               Sign up
