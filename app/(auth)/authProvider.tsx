@@ -9,22 +9,11 @@ import {
   View,
 } from '@aws-amplify/ui-react';
 import '@aws-amplify/ui-react/styles.css';
-import { Amplify } from 'aws-amplify';
+import { useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import React, { useEffect } from 'react';
-
-// https://docs.amplify.aws/gen1/javascript/tools/libraries/configure-categories/
-Amplify.configure({
-  Auth: {
-    Cognito: {
-      userPoolId: process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_ID!,
-      userPoolClientId:
-        process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_CLIENT_ID!,
-    },
-  },
-});
+import React, { useEffect, useState } from 'react';
 
 const components = {
   Header() {
@@ -149,22 +138,41 @@ const formFields = {
 
 const Auth = ({ children }: { children: React.ReactNode }) => {
   const { user } = useAuthenticator((context) => [context.user]);
+  const queryClient = useQueryClient();
   const router = useRouter();
   const pathname = usePathname();
+  const [isLoading, setIsLoading] = useState(true);
 
   const isAuthPage = pathname.match(/^\/(signin|signup)$/);
   const isDashboardPage =
     pathname.startsWith('/manager') || pathname.startsWith('/tenants');
 
+  // Clear query cache on sign out
+  useEffect(() => {
+    if (!user) {
+      queryClient.clear();
+    }
+  }, [user, queryClient]);
+
   // Redirect authenticated users away from auth pages
   useEffect(() => {
-    if (user && isAuthPage) {
+    if (user && isAuthPage && isLoading) {
+      setIsLoading(false);
+      // Prefetch auth user data
+      queryClient.prefetchQuery({
+        queryKey: ['authUser'],
+        queryFn: () =>
+          import('@/state/auth-queries').then((m) =>
+            m.authQueries.getAuthUser(),
+          ),
+      });
       router.push('/');
     }
-  }, [user, isAuthPage, router]);
+  }, [user, isAuthPage, router, queryClient]);
 
+  
   // Allow access to public pages without authentication
-  if (!isAuthPage && !isDashboardPage) {
+  if (!isAuthPage && !isDashboardPage && !isLoading) {
     return <>{children}</>;
   }
 
