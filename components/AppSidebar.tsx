@@ -28,23 +28,35 @@ const AppSidebar = ({ userType }: AppSidebarProps) => {
   const navLinks =
     userType === 'manager'
       ? [
-          { icon: Building, label: 'Properties', href: '/managers/properties' },
+          {
+            icon: Building,
+            label: 'Properties',
+            href: '/managers/properties/feature',
+          },
           {
             icon: FileText,
             label: 'Applications',
-            href: '/managers/applications',
+            href: '/managers/applications/feature',
           },
-          { icon: Settings, label: 'Settings', href: '/managers/settings' },
+          { icon: Settings, label: 'Settings', href: '/settings/page' },
         ]
       : [
-          { icon: Heart, label: 'Favorites', href: '/tenants/favorites' },
+          {
+            icon: Heart,
+            label: 'Favorites',
+            href: '/tenants/favorites/feature',
+          },
           {
             icon: FileText,
             label: 'Applications',
-            href: '/tenants/applications',
+            href: '/tenants/applications/feature',
           },
-          { icon: Home, label: 'Residences', href: '/tenants/residences' },
-          { icon: Settings, label: 'Settings', href: '/tenants/settings' },
+          {
+            icon: Home,
+            label: 'Residences',
+            href: '/tenants/residences/feature',
+          },
+          { icon: Settings, label: 'Settings', href: '/settings/page' },
         ];
 
   return (
