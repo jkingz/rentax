@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface FiltersState {
   location: string;
@@ -15,27 +15,27 @@ export interface FiltersState {
 interface InitialStateTypes {
   filters: FiltersState;
   isFiltersFullOpen: boolean;
-  viewMode: "grid" | "list";
+  viewMode: 'grid' | 'list';
 }
 
 export const initialState: InitialStateTypes = {
   filters: {
-    location: "Los Angeles",
-    beds: "any",
-    baths: "any",
-    propertyType: "any",
+    location: 'Davao City',
+    beds: 'any',
+    baths: 'any',
+    propertyType: 'any',
     amenities: [],
-    availableFrom: "any",
+    availableFrom: 'any',
     priceRange: [null, null],
     squareFeet: [null, null],
-    coordinates: [-118.25, 34.05],
+    coordinates: [125.61278, 7.07306],
   },
   isFiltersFullOpen: false,
-  viewMode: "grid",
+  viewMode: 'grid',
 };
 
 export const globalSlice = createSlice({
-  name: "global",
+  name: 'global',
   initialState,
   reducers: {
     setFilters: (state, action: PayloadAction<Partial<FiltersState>>) => {
@@ -44,7 +44,7 @@ export const globalSlice = createSlice({
     toggleFiltersFullOpen: (state) => {
       state.isFiltersFullOpen = !state.isFiltersFullOpen;
     },
-    setViewMode: (state, action: PayloadAction<"grid" | "list">) => {
+    setViewMode: (state, action: PayloadAction<'grid' | 'list'>) => {
       state.viewMode = action.payload;
     },
   },
