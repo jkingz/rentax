@@ -1,5 +1,6 @@
 'use client';
 
+import StoreProvider from '@/state/redux';
 import { Authenticator } from '@aws-amplify/ui-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -11,7 +12,8 @@ Amplify.configure({
   Auth: {
     Cognito: {
       userPoolId: process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_ID!,
-      userPoolClientId: process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_CLIENT_ID!,
+      userPoolClientId:
+        process.env.NEXT_PUBLIC_AWS_COGNITO_USER_POOL_CLIENT_ID!,
     },
   },
 });
@@ -33,10 +35,14 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
+    //{/* Wrap children with QueryClientProvider for React Query server-side */}
     <QueryClientProvider client={queryClientRef.current}>
-      <Authenticator.Provider>
-        <Auth>{children}</Auth>
-      </Authenticator.Provider>
+      {/* Wrap children with StoreProvider Redux for client-side state  */}
+      <StoreProvider>
+        <Authenticator.Provider>
+          <Auth>{children}</Auth>
+        </Authenticator.Provider>
+      </StoreProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   );
