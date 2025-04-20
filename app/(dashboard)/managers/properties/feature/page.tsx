@@ -39,7 +39,7 @@ const Properties = () => {
       appConsole.info('Triggering refetch...');
       refetch();
     }
-  }, [cognitoId, managerProperties, isPropertiesLoading, refetch]);
+  }, [error, cognitoId, managerProperties, isPropertiesLoading, refetch]);
 
   const isLoading = isAuthLoading || isPropertiesLoading;
 
