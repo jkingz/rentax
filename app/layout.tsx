@@ -7,13 +7,13 @@ import Providers from './providers';
 export const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  preload: true,
+  preload: false,
 });
 
 export const roboto_mono = Roboto_Mono({
   subsets: ['latin'],
   display: 'swap',
-  preload: true,
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -27,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={inter.className}>
-      <body>
+    <html lang="en">
+      <body className={inter.className}>
         <Providers>{children}</Providers>
         <Toaster closeButton />
       </body>
