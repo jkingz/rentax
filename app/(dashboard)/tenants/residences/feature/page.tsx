@@ -11,7 +11,7 @@ import {
 
 const Residences = () => {
   const { data: authUser } = useGetAuthUserQuery();
-  const { data: tenant } = useGetTenantQuery(
+  const { data: tenant, error: tenantError } = useGetTenantQuery(
     authUser?.cognitoInfo?.userId || '',
     {
       skip: !authUser?.cognitoInfo?.userId,
@@ -27,7 +27,7 @@ const Residences = () => {
   });
 
   if (isLoading) return <Loading />;
-  if (error) return <div>Error loading current residences</div>;
+  if (error || tenantError) return <div>Error loading data. Please try again later.</div>;
 
   return (
     <div className="dashboard-container">

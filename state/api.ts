@@ -90,19 +90,20 @@ export const api = createApi({
     getTenant: build.query<Tenant, string>({
       query: (cognitoId) => ({
         url: `tenants/${cognitoId}`,
-        // Add error handling for 404
         validateStatus: (response, result) =>
           response.status === 200 || response.status === 404,
       }),
       transformResponse: (response: any) => {
-        if (!response) return null;
+        if (!response || response.error) return null;
         return response;
       },
       providesTags: (result) => [{ type: 'Tenants', id: result?.id }],
       async onQueryStarted(_, { queryFulfilled }) {
-        await withToast(queryFulfilled, {
-          error: 'Failed to load tenant profile.',
-        });
+        try {
+          await queryFulfilled;
+        } catch (error) {
+          console.error('Tenant profile loading error:', error);
+        }
       },
     }),
 
