@@ -13,28 +13,37 @@ const PropertyOverview = ({ propertyId }: PropertyOverviewProps) => {
     return <>Property not Found</>;
   }
 
+  // Ensure property exists before accessing its properties
+  const {
+    location,
+    name,
+    averageRating = 0,
+    numberOfReviews = 0,
+    pricePerMonth = 0,
+    beds = 0,
+    baths = 0,
+    squareFeet = 0,
+    description = '',
+  } = property;
+
   return (
     <div>
       {/* Header */}
       <div className="mb-4">
         <div className="text-sm text-gray-500 mb-1">
-          {property.location?.country} / {property.location?.state} /{' '}
-          <span className="font-semibold text-gray-600">
-            {property.location?.city}
-          </span>
+          {location?.country} / {location?.state} /{' '}
+          <span className="font-semibold text-gray-600">{location?.city}</span>
         </div>
-        <h1 className="text-3xl font-bold my-5">{property.name}</h1>
+        <h1 className="text-3xl font-bold my-5">{name}</h1>
         <div className="flex justify-between items-center">
           <span className="flex items-center text-gray-500">
             <MapPin className="w-4 h-4 mr-1 text-gray-700" />
-            {property.location?.city}, {property.location?.state},{' '}
-            {property.location?.country}
+            {location?.city}, {location?.state}, {location?.country}
           </span>
           <div className="flex justify-between items-center gap-3">
             <span className="flex items-center text-yellow-500">
               <Star className="w-4 h-4 mr-1 fill-current" />
-              {property.averageRating.toFixed(1)} ({property.numberOfReviews}{' '}
-              Reviews)
+              {averageRating.toFixed(1)} ({numberOfReviews} Reviews)
             </span>
             <span className="text-green-600">Verified Listing</span>
           </div>
@@ -47,24 +56,24 @@ const PropertyOverview = ({ propertyId }: PropertyOverviewProps) => {
           <div>
             <div className="text-sm text-gray-500">Monthly Rent</div>
             <div className="font-semibold">
-              ${property.pricePerMonth.toLocaleString()}
+              ${pricePerMonth.toLocaleString()}
             </div>
           </div>
           <div className="border-l border-gray-300 h-10"></div>
           <div>
             <div className="text-sm text-gray-500">Bedrooms</div>
-            <div className="font-semibold">{property.beds} bd</div>
+            <div className="font-semibold">{beds} bd</div>
           </div>
           <div className="border-l border-gray-300 h-10"></div>
           <div>
             <div className="text-sm text-gray-500">Bathrooms</div>
-            <div className="font-semibold">{property.baths} ba</div>
+            <div className="font-semibold">{baths} ba</div>
           </div>
           <div className="border-l border-gray-300 h-10"></div>
           <div>
             <div className="text-sm text-gray-500">Square Feet</div>
             <div className="font-semibold">
-              {property.squareFeet.toLocaleString()} sq ft
+              {squareFeet.toLocaleString()} sq ft
             </div>
           </div>
         </div>
@@ -72,9 +81,9 @@ const PropertyOverview = ({ propertyId }: PropertyOverviewProps) => {
 
       {/* Summary */}
       <div className="my-16">
-        <h2 className="text-xl font-semibold mb-5">About {property.name}</h2>
+        <h2 className="text-xl font-semibold mb-5">About {name}</h2>
         <p className="text-gray-500 leading-7">
-          {property.description}
+          {description}
           Experience resort style luxury living at Seacrest Homes, where the
           ocean and city are seamlessly intertwined. Our newly built community
           features sophisticated two and three-bedroom residences, each complete
@@ -98,8 +107,8 @@ const PropertyOverview = ({ propertyId }: PropertyOverviewProps) => {
           one of the top 10 Best in Los Angeles. Contact us today to tour and
           embrace the Seacrest luxury lifestyle as your own. Seacrest Homes
           Apartments is an apartment community located in Los Angeles County and
-          the 90501 ZIP Code. This area is served by the Los Angeles Unified
-          attendance zone.
+          the 90501 ZIP Code. This area is served by the Unified attendance
+          zone.
         </p>
       </div>
     </div>
