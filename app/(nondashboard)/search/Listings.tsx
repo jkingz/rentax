@@ -35,7 +35,7 @@ const Listings = () => {
     isLoading,
     isError,
     error,
-  } = useGetPropertiesQuery(filters, {
+  } = useGetPropertiesQuery(validFilters, {
     skip: !isValidFilters,
   });
   const hasProperties = properties && properties.length > 0;
