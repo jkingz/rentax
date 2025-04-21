@@ -35,7 +35,7 @@ export type PropertyWithLocation = {
 };
 
 export const defaultFilters: FiltersState = {
-  location: 'teasd',
+  location: 'Los Angeles',
   beds: 'any',
   baths: 'any',
   propertyType: 'any',

@@ -22,13 +22,22 @@ const Listings = () => {
   const [removeFavorite] = useRemoveFavoritePropertyMutation();
   const viewMode = useAppSelector((state) => state.global.viewMode);
   const filters = useAppSelector((state) => state.global.filters);
-
+  const isValidFilters = Object.values(filters).some(
+    (value) => value !== undefined && value !== '',
+  );
+  // Validate filters
+  const validFilters = {
+    ...filters,
+    location: filters.location || 'All',
+  };
   const {
     data: properties,
     isLoading,
     isError,
-  } = useGetPropertiesQuery(filters);
-
+    error,
+  } = useGetPropertiesQuery(filters, {
+    skip: !isValidFilters,
+  });
   const hasProperties = properties && properties.length > 0;
 
   const handleFavoriteToggle = async (propertyId: number) => {
@@ -51,8 +60,15 @@ const Listings = () => {
     }
   };
 
-  if (isLoading) return <>Loading...</>;
-  if (isError || !properties) return <div>Failed to fetch properties</div>;
+  if (isLoading) return <div className="w-full p-4">Loading properties...</div>;
+  if (isError || !properties) {
+    console.error('Properties fetch error:', error);
+    return (
+      <div className="w-full p-4 text-red-600">
+        Unable to fetch properties. Please try again later.
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
