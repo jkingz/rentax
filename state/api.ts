@@ -88,7 +88,16 @@ export const api = createApi({
 
     // tenant related endpoints
     getTenant: build.query<Tenant, string>({
-      query: (cognitoId) => `tenants/${cognitoId}`,
+      query: (cognitoId) => ({
+        url: `tenants/${cognitoId}`,
+        // Add error handling for 404
+        validateStatus: (response, result) =>
+          response.status === 200 || response.status === 404,
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return null;
+        return response;
+      },
       providesTags: (result) => [{ type: 'Tenants', id: result?.id }],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
@@ -147,14 +156,12 @@ export const api = createApi({
       query: (cognitoId) => `managers/${cognitoId}/properties`,
       transformResponse: (response: any) => {
         // Ensure we're returning an array, even if empty
-        return Array.isArray(response) ? response.filter(Boolean) : [];
+        return Array.isArray(response) ? response : [];
       },
       providesTags: (result) =>
         result
           ? [
-              ...result
-                .filter(Boolean)
-                .map(({ id }) => ({ type: 'Properties' as const, id })),
+              ...result.map(({ id }) => ({ type: 'Properties' as const, id })),
               { type: 'Properties', id: 'LIST' },
             ]
           : [{ type: 'Properties', id: 'LIST' }],
@@ -190,8 +197,17 @@ export const api = createApi({
 
     // get property
     getProperty: build.query<Property, number>({
-      query: (id) => `properties/${id}`,
-      providesTags: (result, error, id) => [{ type: 'PropertyDetails', id }],
+      query: (id) => ({
+        url: `properties/${id}`,
+        // Add error handling for 404
+        validateStatus: (response, result) =>
+          response.status === 200 || response.status === 404,
+      }),
+      transformResponse: (response: any) => {
+        if (!response) return null;
+        return response;
+      },
+      providesTags: (result) => [{ type: 'PropertyDetails', id: result?.id }],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
           error: 'Failed to load property details.',

@@ -7,6 +7,7 @@ import {
   useGetTenantQuery,
   useRemoveFavoritePropertyMutation,
 } from '@/state/api';
+import { useProperties } from '@/state/property-hooks';
 import { useAppSelector } from '@/state/redux';
 import { Property } from '@/types/prismaTypes';
 
@@ -22,22 +23,13 @@ const Listings = () => {
   const [removeFavorite] = useRemoveFavoritePropertyMutation();
   const viewMode = useAppSelector((state) => state.global.viewMode);
   const filters = useAppSelector((state) => state.global.filters);
-  const isValidFilters = Object.values(filters).some(
-    (value) => value !== undefined && value !== '',
-  );
-  // Validate filters
-  const validFilters = {
-    ...filters,
-    location: filters.location || 'All',
-  };
+
   const {
     data: properties,
     isLoading,
     isError,
     error,
-  } = useGetPropertiesQuery(validFilters, {
-    skip: !isValidFilters,
-  });
+  } = useProperties(filters);
   const hasProperties = properties && properties.length > 0;
 
   const handleFavoriteToggle = async (propertyId: number) => {
