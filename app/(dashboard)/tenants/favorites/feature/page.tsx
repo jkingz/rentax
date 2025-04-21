@@ -26,20 +26,21 @@ const Favorites = () => {
         subtitle="Browse and manage your saved property listings"
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {favoriteProperties?.map((property) => (
-          <Card
-            key={property.id}
-            property={property}
-            isFavorite={true}
-            onFavoriteToggle={() => {}}
-            showFavoriteButton={false}
-            propertyLink={`/tenants/residences/${property.id}`}
-          />
-        ))}
+        {Array.isArray(favoriteProperties) ? (
+          favoriteProperties.map((property) => (
+            <Card
+              key={property.id}
+              property={property}
+              isFavorite={true}
+              onFavoriteToggle={() => {}}
+              showFavoriteButton={false}
+              propertyLink={`/tenants/residences/${property.id}`}
+            />
+          ))
+        ) : (
+          <p>You don&lsquo;t have any favorited properties</p>
+        )}
       </div>
-      {(!favoriteProperties || favoriteProperties.length === 0) && (
-        <p>You don&lsquo;t have any favorited properties</p>
-      )}
     </div>
   );
 };
