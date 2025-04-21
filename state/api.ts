@@ -23,7 +23,7 @@ export const api = createApi({
       }
       return headers;
     },
-    credentials: 'include',
+    // credentials: 'include',
   }),
   reducerPath: 'api',
   tagTypes: [
@@ -116,7 +116,10 @@ export const api = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.map(({ id }) => ({ type: 'Properties' as const, id })),
+              ...result.map((property) => property?.id
+                ? { type: 'Properties' as const, id: property.id }
+                : { type: 'Properties' as const, id: 'LIST' }
+              ),
               { type: 'Properties', id: 'LIST' },
             ]
           : [{ type: 'Properties', id: 'LIST' }],
