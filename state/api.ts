@@ -326,7 +326,16 @@ export const api = createApi({
 
     // lease related enpoints
     getLeases: build.query<Lease[], number>({
-      query: () => 'leases',
+      query: () => ({
+        url: 'leases',
+        // Add error handling for 404 and other status codes
+        validateStatus: (response, result) =>
+          response.status === 200 || response.status === 404
+      }),
+      transformResponse: (response: any) => {
+        // Ensure we're returning an array, even if empty
+        return Array.isArray(response) ? response : [];
+      },
       providesTags: ['Leases'],
       async onQueryStarted(_, { queryFulfilled }) {
         await withToast(queryFulfilled, {
