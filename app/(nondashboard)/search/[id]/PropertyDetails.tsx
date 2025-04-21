@@ -13,10 +13,18 @@ const PropertyDetails = ({ propertyId }: PropertyDetailsProps) => {
     isLoading,
   } = useGetPropertyQuery(propertyId);
 
-  if (isLoading) return <><Loader /></>;
-  if (isError || !property) {
-    return <><NotFound /></>;
-  }
+  if (isLoading) return <Loader />;
+  if (isError || !property) return <NotFound />;
+
+  // Destructure all needed properties with default values
+  const {
+    amenities = [],
+    highlights = [],
+    applicationFee = 0,
+    securityDeposit = 0,
+    isPetsAllowed = false,
+    isParkingIncluded = false,
+  } = property;
 
   return (
     <div className="mb-6">
@@ -24,7 +32,7 @@ const PropertyDetails = ({ propertyId }: PropertyDetailsProps) => {
       <div>
         <h2 className="text-xl font-semibold my-3">Property Amenities</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {property.amenities.map((amenity: AmenityEnum) => {
+          {amenities.map((amenity: AmenityEnum) => {
             const Icon = AmenityIcons[amenity as AmenityEnum] || HelpCircle;
             return (
               <div
@@ -47,7 +55,7 @@ const PropertyDetails = ({ propertyId }: PropertyDetailsProps) => {
           Highlights
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mt-4 w-full">
-          {property.highlights.map((highlight: HighlightEnum) => {
+          {highlights.map((highlight: HighlightEnum) => {
             const Icon =
               HighlightIcons[highlight as HighlightEnum] || HelpCircle;
             return (
@@ -87,30 +95,25 @@ const PropertyDetails = ({ propertyId }: PropertyDetailsProps) => {
               <span className="text-primary-700 font-medium">
                 Application Fee
               </span>
-              <span className="text-primary-700">
-                ${property.applicationFee}
-              </span>
+              <span className="text-primary-700">${applicationFee}</span>
             </div>
             <hr />
             <div className="flex justify-between py-2 bg-secondary-50">
               <span className="text-primary-700 font-medium">
                 Security Deposit
               </span>
-              <span className="text-primary-700">
-                ${property.securityDeposit}
-              </span>
+              <span className="text-primary-700">${securityDeposit}</span>
             </div>
             <hr />
           </TabsContent>
           <TabsContent value="pets">
             <p className="font-semibold mt-5 mb-2">
-              Pets are {property.isPetsAllowed ? 'allowed' : 'not allowed'}
+              Pets are {isPetsAllowed ? 'allowed' : 'not allowed'}
             </p>
           </TabsContent>
           <TabsContent value="parking">
             <p className="font-semibold mt-5 mb-2">
-              Parking is{' '}
-              {property.isParkingIncluded ? 'included' : 'not included'}
+              Parking is {isParkingIncluded ? 'included' : 'not included'}
             </p>
           </TabsContent>
         </Tabs>

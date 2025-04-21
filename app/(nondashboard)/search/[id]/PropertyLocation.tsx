@@ -1,3 +1,5 @@
+import Loader from '@/app/loading';
+import NotFound from '@/app/not-found';
 import { useGetPropertyQuery } from '@/state/api';
 import { Compass, MapPin } from 'lucide-react';
 import mapboxgl from 'mapbox-gl';
@@ -41,10 +43,10 @@ const PropertyLocation = ({ propertyId }: PropertyDetailsProps) => {
     return () => map.remove();
   }, [property, isError, isLoading]);
 
-  if (isLoading) return <>Loading...</>;
-  if (isError || !property) {
-    return <>Property not Found</>;
-  }
+  if (isLoading) return <Loader />;
+  if (isError || !property) return <NotFound />;
+
+  const { location } = property;
 
   return (
     <div className="py-16">
@@ -56,12 +58,12 @@ const PropertyLocation = ({ propertyId }: PropertyDetailsProps) => {
           <MapPin className="w-4 h-4 mr-1 text-gray-700" />
           Property Address:
           <span className="ml-2 font-semibold text-gray-700">
-            {property.location?.address || 'Address not available'}
+            {location?.address || 'Address not available'}
           </span>
         </div>
         <a
           href={`https://maps.google.com/?q=${encodeURIComponent(
-            property.location?.address || '',
+            location?.address || '',
           )}`}
           target="_blank"
           rel="noopener noreferrer"
