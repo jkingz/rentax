@@ -110,14 +110,12 @@ export const api = createApi({
       query: (cognitoId) => `tenants/${cognitoId}/current-residences`,
       transformResponse: (response: any) => {
         // Ensure we're returning an array, even if empty
-        return Array.isArray(response) ? response.filter(Boolean) : [];
+        return Array.isArray(response) ? response : [];
       },
       providesTags: (result) =>
         result
           ? [
-              ...result
-                .filter(Boolean)
-                .map(({ id }) => ({ type: 'Properties' as const, id })),
+              ...result.map(({ id }) => ({ type: 'Properties' as const, id })),
               { type: 'Properties', id: 'LIST' },
             ]
           : [{ type: 'Properties', id: 'LIST' }],
@@ -330,7 +328,7 @@ export const api = createApi({
         url: 'leases',
         // Add error handling for 404 and other status codes
         validateStatus: (response, result) =>
-          response.status === 200 || response.status === 404
+          response.status === 200 || response.status === 404,
       }),
       transformResponse: (response: any) => {
         // Ensure we're returning an array, even if empty

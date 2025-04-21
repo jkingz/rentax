@@ -3,7 +3,7 @@
 import { NAVBAR_HEIGHT } from '@/lib/constants';
 import { cleanParams } from '@/lib/utils';
 import { setFilters } from '@/state';
-import { useGetPropertiesQuery } from '@/state/api';
+import { useProperties } from '@/state/property-hooks';
 import { useAppDispatch, useAppSelector } from '@/state/redux';
 import { useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
@@ -19,7 +19,7 @@ const SearchPage = () => {
     (state) => state.global.isFiltersFullOpen,
   );
 
-  const { data: properties } = useGetPropertiesQuery(
+  const { data: properties } = useProperties(
     useAppSelector((state) => state.global.filters),
   );
   const hasProperties = properties && properties.length > 0;
@@ -42,7 +42,7 @@ const SearchPage = () => {
 
     const cleanedFilters = cleanParams(initialFilters);
     dispatch(setFilters(cleanedFilters));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchParams, dispatch]);
   return (
     <div
       className="w-full mx-auto px-5 flex flex-col"

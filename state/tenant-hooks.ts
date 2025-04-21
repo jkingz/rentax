@@ -9,5 +9,6 @@ export const useTenant = (cognitoId: string) => {
     queryKey: ['tenant', cognitoId],
     queryFn: () => fetchTenant(cognitoId),
     enabled: Boolean(cognitoId),
+    select: (tenant) => tenant,
   });
 };
