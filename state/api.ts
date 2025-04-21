@@ -106,7 +106,9 @@ export const api = createApi({
       providesTags: (result) =>
         result
           ? [
-              ...result.filter(Boolean).map(({ id }) => ({ type: 'Properties' as const, id })),
+              ...result
+                .filter(Boolean)
+                .map(({ id }) => ({ type: 'Properties' as const, id })),
               { type: 'Properties', id: 'LIST' },
             ]
           : [{ type: 'Properties', id: 'LIST' }],
@@ -220,6 +222,10 @@ export const api = createApi({
         });
 
         return { url: 'properties', params };
+      },
+      transformResponse: (response: any) => {
+        // Always return an array, even if response is null/undefined/not an array
+        return Array.isArray(response) ? response : [];
       },
       providesTags: (result) =>
         result

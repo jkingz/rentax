@@ -6,5 +6,6 @@ export const useProperties = (filters: Partial<FiltersState> = {}) => {
   return useQuery({
     queryKey: ['properties', filters],
     queryFn: () => fetchProperties(filters),
+    select: (data) => (Array.isArray(data) ? data : []), // Ensures always an array
   });
 };

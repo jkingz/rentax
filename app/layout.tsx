@@ -7,13 +7,13 @@ import Providers from './providers';
 export const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  preload: false,
+  preload: true,
 });
 
 export const roboto_mono = Roboto_Mono({
   subsets: ['latin'],
   display: 'swap',
-  preload: false,
+  preload: true,
 });
 
 export const metadata: Metadata = {
