@@ -17,23 +17,20 @@ const PropertyLocation = ({ propertyId }: PropertyDetailsProps) => {
   const mapContainerRef = useRef(null);
 
   useEffect(() => {
-    if (isLoading || isError || !property) return;
+    if (isLoading || isError || !property || !property.location?.coordinates)
+      return;
+
+    const { longitude = 0, latitude = 0 } = property.location.coordinates;
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current!,
       style: 'mapbox://styles/jkingz/cm9o11nu300et01so7n05c496',
-      center: [
-        property.location.coordinates.longitude,
-        property.location.coordinates.latitude,
-      ],
+      center: [longitude, latitude],
       zoom: 14,
     });
 
     const marker = new mapboxgl.Marker()
-      .setLngLat([
-        property.location.coordinates.longitude,
-        property.location.coordinates.latitude,
-      ])
+      .setLngLat([longitude, latitude])
       .addTo(map);
 
     const markerElement = marker.getElement();
@@ -44,7 +41,8 @@ const PropertyLocation = ({ propertyId }: PropertyDetailsProps) => {
   }, [property, isError, isLoading]);
 
   if (isLoading) return <Loader />;
-  if (isError || !property) return <NotFound />;
+  if (isError || !property || !property.location?.coordinates)
+    return <NotFound />;
 
   const { location } = property;
 
