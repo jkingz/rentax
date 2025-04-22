@@ -1,3 +1,4 @@
+'use client';
 import Loader from '@/app/loading';
 import NotFound from '@/app/not-found';
 import { useGetPropertyQuery } from '@/state/api';
@@ -25,7 +26,7 @@ const PropertyLocation = ({ propertyId }: PropertyDetailsProps) => {
     const map = new mapboxgl.Map({
       container: mapContainerRef.current!,
       // style: 'mapbox://styles/jkingz/cm9o11nu300et01so7n05c496',
-      style:'mapbox://styles/mapbox/streets-v12',
+      style: 'mapbox://styles/mapbox/streets-v12',
       center: [longitude, latitude],
       zoom: 14,
     });

@@ -1,3 +1,4 @@
+'use client';
 import Loader from '@/app/loading';
 import NotFound from '@/app/not-found';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
