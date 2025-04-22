@@ -21,9 +21,10 @@ const Map: React.FC<MapProps> = ({ className }) => {
 
     const map = new mapboxgl.Map({
       container: mapContainerRef.current!,
-      style: 'mapbox://styles/jkingz/cm9o11nu300et01so7n05c496',
+      // style: 'mapbox://styles/jkingz/cm9o11nu300et01so7n05c496',
+      style: 'mapbox://styles/mapbox/streets-v12',
       center: filters.coordinates || [-74.5, 40],
-      zoom: 8.5,
+      zoom: 9,
     });
 
     properties.forEach((property) => {
