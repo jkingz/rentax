@@ -1,8 +1,8 @@
 import { cleanParams } from '@/lib/utils';
 import { FiltersState } from '@/types/filters';
 import { Property } from '@/types/prismaTypes';
-import { axiosInstance } from './axios-config';
 import { appConsole } from '@/utils/console';
+import { axiosInstance } from './axios-config';
 
 export const fetchProperties = async (filters: Partial<FiltersState> = {}) => {
   const params = cleanParams({
@@ -28,9 +28,19 @@ export const fetchProperties = async (filters: Partial<FiltersState> = {}) => {
     const { data } = await axiosInstance.get<Property[]>('properties', {
       params,
     });
+    console.log(data, 'WWWWW');
     return data;
   } catch (error) {
     console.error('Error fetching properties:', error);
     throw error;
   }
+};
+
+export const fetchProperty = async (id: number): Promise<Property> => {
+  try {
+    if (!id) return null;
+    const { data } = await axiosInstance.get('`properties/${id}`');
+    console.log(data, 'dasdasdas');
+    return data;
+  } catch (error) {}
 };

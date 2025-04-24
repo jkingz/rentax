@@ -4,15 +4,13 @@ import NotFound from '@/app/not-found';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { AmenityIcons, HighlightIcons } from '@/lib/constants';
 import { formatEnumString } from '@/lib/utils';
-import { useGetPropertyQuery } from '@/state/api';
+// import { useGetPropertyQuery } from '@/state/api';
+import { useProperty } from '@/state/property-hooks';
 import { HelpCircle } from 'lucide-react';
 
 const PropertyDetails = ({ propertyId }: PropertyDetailsProps) => {
-  const {
-    data: property,
-    isError,
-    isLoading,
-  } = useGetPropertyQuery(propertyId);
+  const { data: property, isError, isLoading } = useProperty(propertyId);
+  console.log(property, 'RRRRR');
 
   if (isLoading) return <Loader />;
   if (isError || !property) return <NotFound />;

@@ -10,17 +10,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  useGetPaymentsQuery,
-  useGetPropertyLeasesQuery,
-  useGetPropertyQuery,
-} from '@/state/api';
+import { useGetPaymentsQuery, useGetPropertyLeasesQuery } from '@/state/api';
+import { useProperty } from '@/state/property-hooks';
+import { appConsole } from '@/utils/console';
 import { ArrowDownToLine, ArrowLeft, Check, Download } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { appConsole } from '@/utils/console';
-
 
 const PropertyTenants = () => {
   const { id } = useParams();
@@ -28,7 +24,8 @@ const PropertyTenants = () => {
   appConsole.info('Property ID:', propertyId);
 
   const { data: property, isLoading: propertyLoading } =
-    useGetPropertyQuery(propertyId);
+    useProperty(propertyId);
+  console.log(property, 'ZZZZZ');
   const { data: leases, isLoading: leasesLoading } =
     useGetPropertyLeasesQuery(propertyId);
   const { data: payments, isLoading: paymentsLoading } =
