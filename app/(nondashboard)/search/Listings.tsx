@@ -3,7 +3,6 @@ import CardCompact from '@/components/CardCompact';
 import {
   useAddFavoritePropertyMutation,
   useGetAuthUserQuery,
-  useGetPropertiesQuery,
   useGetTenantQuery,
   useRemoveFavoritePropertyMutation,
 } from '@/state/api';

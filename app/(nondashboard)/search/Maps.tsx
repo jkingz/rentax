@@ -1,11 +1,10 @@
 'use client';
+import { useProperties } from '@/state/property-hooks';
 import { useAppSelector } from '@/state/redux';
+import { Property } from '@/types/prismaTypes';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { useEffect, useRef } from 'react';
-// import { useGetPropertiesQuery } from "@/state/api";
-import { useProperties } from '@/state/property-hooks';
-import { Property } from '@/types/prismaTypes';
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN as string;
 interface MapProps {
@@ -16,31 +15,40 @@ const Map: React.FC<MapProps> = ({ className }) => {
   const mapContainerRef = useRef(null);
   const filters = useAppSelector((state) => state.global.filters);
   const { data: properties, isLoading, isError } = useProperties(filters);
+  const mapRef = useRef<mapboxgl.Map | null>(null);
+
   useEffect(() => {
     if (isLoading || isError || !properties) return;
 
-    const map = new mapboxgl.Map({
-      container: mapContainerRef.current!,
-      // style: 'mapbox://styles/jkingz/cm9o11nu300et01so7n05c496',
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: filters.coordinates || [-74.5, 40],
-      zoom: 9,
-    });
+    if (!mapRef.current) {
+      mapRef.current = new mapboxgl.Map({
+        container: mapContainerRef.current!,
+        // style: 'mapbox://styles/jkingz/cm9o11nu300et01so7n05c496',
+        style: 'mapbox://styles/mapbox/streets-v12',
+        center: filters.coordinates || [-74.5, 40],
+        zoom: 9,
+      });
+    }
 
     properties.forEach((property) => {
-      const marker = createPropertyMarker(property, map);
+      const marker = createPropertyMarker(property, mapRef.current!);
       const markerElement = marker.getElement();
       const path = markerElement.querySelector("path[fill='#3FB1CE']");
       if (path) path.setAttribute('fill', '#000000');
     });
 
     const resizeMap = () => {
-      if (map) setTimeout(() => map.resize(), 700);
+      if (mapRef.current) setTimeout(() => mapRef.current!.resize(), 700);
     };
     resizeMap();
 
-    return () => map.remove();
-  }, [isLoading, isError, properties, filters.coordinates]);
+    return () => {
+      if (mapRef.current) {
+        mapRef.current.remove();
+        mapRef.current = null;
+      }
+    };
+  }, [isLoading, isError, properties]);
 
   if (isLoading) return <>Loading...</>;
   if (isError || !properties) return <div>Failed to fetch properties</div>;
